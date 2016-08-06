@@ -43,12 +43,20 @@ var lastUserId = ""; // required change to disconnect
 
 var timeOutSeconds = 3000;  // 1000 is 1 second
 
-var upm_grove = require('jsupm_grove');
+var groveSensor = require('jsupm_grove');
 
 //setup access analog input Analog pin #0 (A0)
-var groveSlide1 = new upm_grove.GroveSlide(0);   // pin 0
-var groveSlide2 = new upm_grove.GroveSlide(1);   // pin 1
-var groveSlide3 = new upm_grove.GroveSlide(2);   // pin 2
+var groveSlide1 = new groveSensor.GroveSlide(0);   // pin 0
+var groveSlide2 = new groveSensor.GroveSlide(1);   // pin 1
+var groveSlide3 = new groveSensor.GroveSlide(2);   // pin 2
+
+var valve1      = new groveSensor.GroveRelay(7);   // pin 7
+var valve2      = new groveSensor.GroveRelay(6);   // pin 6
+var valve3      = new groveSensor.GroveRelay(5);   // pin 5
+
+var valveState1 = false;
+var valveState2 = false;
+var valveState3 = false;
 
 var index = 0;
 var totalVolts = 0;
@@ -58,6 +66,35 @@ var averageSlider = 0;
 
 var sensorChosen = 0;
 var pageNumber = 1;
+
+function toggleValve(valveNum)
+{
+    //var currentValve;
+    switch(valveNum)
+    {
+        case 1:
+        {   //currentValve = valve1; 
+            valveState1 = !valveState1;
+            if (valveState1 == true) { valve1.on() }
+            else { valve1.off(); }
+            break;   
+        }
+        case 2:
+        {   //currentValve = valve2; 
+            valveState2 = !valveState2;
+            if (valveState2 == true) { valve2.on() }
+            else { valve2.off(); }
+            break;    
+        }
+        case 3:
+        {   //currentValve = valve3; 
+            valveState3 = !valveState3;
+            if (valveState3 == true) { valve3.on() }
+            else { valve3.off(); }
+            break;    
+        }
+    }
+}
 
 function printSliderValues(sliderNum)
 {
@@ -84,7 +121,7 @@ function printSliderValues(sliderNum)
 }
 
 
-function tempLoop() 
+function temperatureLoop() 
 {
     // for now, we will display each sensor value in turn, just the raw values
     //console.log("Slider value 1: " + groveSlide1.voltage_value().toFixed(2) + " V");
@@ -103,7 +140,7 @@ function tempLoop()
         printSliderValues(sensorChosen);
     }
     // wait specified timeout then call function again
-    setTimeout(tempLoop, timeOutSeconds);
+    setTimeout(temperatureLoop, timeOutSeconds);
 }
 
 app.get('/', function(req, res) {
@@ -133,7 +170,7 @@ io.on('connection', function(socket) {
     io.emit('connected users', connectedUsersArray);
     
     // once we're connected, start the loop
-    tempLoop();
+    temperatureLoop();
     
     /*
     socket.on('user disconnect', function(msg) {
