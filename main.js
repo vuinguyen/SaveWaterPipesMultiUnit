@@ -41,8 +41,6 @@ var connectedUsersArray = [];
 var userId;
 var lastUserId = ""; // required change to disconnect
 
-var timeOutSeconds = 3000;  // 1000 is 1 second
-
 var groveSensor = require('jsupm_grove');
 
 //setup access analog input Analog pin #0 (A0)
@@ -58,14 +56,58 @@ var valveState1 = false;
 var valveState2 = false;
 var valveState3 = false;
 
-var index = 0;
-var totalVolts = 0;
-var totalSlider = 0;
-var averageVolts = 0;
-var averageSlider = 0;
-
 var sensorChosen = 0;
 var pageNumber = 1;
+
+var rawSlider = 0;
+var volts = 0;
+var thresholdValue = 0.5;
+var ratio = 1/5;            // used to convert slider values to temp
+var constant = -36;         // used to convert slider values to temp
+var firstTemp = true;       // is this the first temperature reading?
+
+var timeOutSeconds = 3000;  // 1000 is 1 second
+
+var criticalTemp = 33;
+var warningTemp = 38;
+var offLineTemp = 10; 
+
+var averageItemCount = 5;
+var averageCounter = 0;
+
+var totalVolts = 0;
+var totalSlider = 0;
+var totalTemp = 0;
+var averageVolts = 0;
+var averageSlider = 0;
+var averageTemp = 0;
+
+var lcd = require('./lcd');
+var display = new lcd.LCD(0);   // 12C socket  
+
+function setLCDColor(inSeverity) 
+{
+    var red = 0;
+    var green = 192;
+    var blue = 0;
+    
+    if (inSeverity == 3)
+    {
+        red = 192;
+        green = 0;
+        blue = 0; 
+    }
+    else if (inSeverity == 2)
+    {
+        red = 192;
+        green = 192;
+        blue = 0; 
+    }
+    
+    display.setColor(red, green, blue);
+};
+
+
 
 function toggleValve(valveNum)
 {
@@ -140,8 +182,37 @@ function temperatureLoop()
         printSliderValues(sensorChosen);
     }
     // wait specified timeout then call function again
-    setTimeout(temperatureLoop, timeOutSeconds);
+    //setTimeout(temperatureLoop, timeOutSeconds);
 }
+
+function mainLoop()
+{
+    temperatureLoop();
+    setTimeout(mainLoop, timeOutSeconds);
+}
+
+function getTemperature(rawSlider) 
+{
+    var temperature = (rawSlider * ratio) + constant; // convert slider to temperature
+    var temp2 = temperature.toPrecision(3);
+    return temp2;
+}
+
+function getSeverity(temp)
+{
+    var severity = 1;
+    if (temp <= warningTemp)
+    {
+        severity = 2;
+        if (temp <= criticalTemp)
+        {
+            severity = 3;
+        }
+    }
+    
+    return severity;
+}
+
 
 app.get('/', function(req, res) {
     //Join all arguments together and normalize the resulting path.
@@ -170,7 +241,8 @@ io.on('connection', function(socket) {
     io.emit('connected users', connectedUsersArray);
     
     // once we're connected, start the loop
-    temperatureLoop();
+    //temperatureLoop();
+    mainLoop();
     
     /*
     socket.on('user disconnect', function(msg) {

@@ -30,8 +30,8 @@
         "name": "SaveWaterMultiUnits.xdk"
       },
       "SaveWaterMultiUnits.xdke": {
-        "previousModTime": 1470519199000,
-        "modified": 1470519199000,
+        "previousModTime": 1470523032000,
+        "modified": 1470523032000,
         "seen": true,
         "name": "SaveWaterMultiUnits.xdke"
       },
@@ -42,8 +42,8 @@
         "name": "icon.png"
       },
       "main.js": {
-        "previousModTime": 1470519245000,
-        "modified": 1470519245000,
+        "previousModTime": 1470523111000,
+        "modified": 1470523111000,
         "seen": true,
         "name": "main.js"
       },
@@ -232,113 +232,131 @@
         "modified": 1470179721000,
         "seen": true,
         "name": "client/selectedFaucetReading.js"
+      },
+      "client/lcd.js": {
+        "previousModTime": 1465257557000,
+        "modified": 1465257557000,
+        "seen": true,
+        "name": "client/lcd.js"
+      },
+      "lcd.js": {
+        "previousModTime": 1470523000000,
+        "modified": 1470523000000,
+        "seen": true,
+        "name": "lcd.js"
       }
     },
     "boardFileStatus": {
       "LICENSE.md": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "README.md": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "icon.png": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "main.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "package.json": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "websockets_client.png": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "xdk-publish-meta-data.json": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/index.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/index.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/index.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "xdk/project-info.json": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/secondpage.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/secondpage.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/secondpage.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16/index.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16/index.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16/index.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/main-styles.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/override.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/overview-styles.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16a/index.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16a/index.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16a/index.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/index.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/index.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/index.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/secondpage.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/secondpage.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/files_old/8-6-16b/secondpage.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/faucet-styles.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/selectedFaucetReading.html": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/temperature-styles.css": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/faucetOff.jpg": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/faucetOn.jpg": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
       },
       "client/selectedFaucetReading.js": {
-        "previousModTime": 1470519254936
+        "previousModTime": 1470523123788
+      },
+      "client/lcd.js": {
+        "previousModTime": 1470523123788
+      },
+      "lcd.js": {
+        "previousModTime": 1470523123788
       }
     }
   }
