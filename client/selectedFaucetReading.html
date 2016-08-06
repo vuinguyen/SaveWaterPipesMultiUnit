@@ -1,0 +1,179 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Save The Water Pipes</title>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="socket.io/socket.io.js"></script>
+<script src="override.js" type="text/javascript"></script> <!-- Our project js file -->
+
+<!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5."></script>
+ <![endif]-->
+
+<link rel="stylesheet" href="main-styles.css" type="text/css">
+<link rel="stylesheet" href="temperature-styles.css" type="text/css" />
+<link rel="stylesheet" href="faucet-styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<header>
+	<h1>Your Water Pipe Status</h1>
+</header>
+
+<div id="container">
+	<!-- temperature section -->
+	<section id="TemperatureDetail">
+		<h2>Temperature/DateTime</h2>
+		<h4 id="currentDate">	</h4>
+
+    <!-- Grid to display temp readings -->
+
+   <!--Old ul listing-->
+   <!-- <ul>
+   <li class="danger">Temp. 35 at 8:12pm</li>
+   <li class="danger">Temp. 38 at 8:12pm</li>
+   <li class="warning">Temp. 41 at 8:12pm</li>
+   <li class="warning">Temp. 42 at 8:12pm</li>
+   <li class="good">Temp. 48 at 8:12pm</li>
+   <li class="good">Temp. 52 at 8:12pm</li>
+   <li class="good">Temp. 55 at 8:12pm</li>
+   <li class="error">***WARNING: CENSOR OFFLINE***</li>
+   <li class="error">***WARNING: CENSOR OFFLINE***</li>
+   <li class="error">***WARNING: CENSOR OFFLINE***</li>
+   <li class="warning">Temp. 41 at 8:12pm</li>
+   <li class="warning">Temp. 42 at 8:12pm</li>
+   <li class="warning">Temp. 41 at 8:12pm</li>
+   <li class="warning">Temp. 42 at 8:12pm</li>
+   <li class="good">Temp. 48 at 8:12pm</li>
+   <li class="good">Temp. 52 at 8:12pm</li>
+   <li class="good">Temp. 55 at 8:12pm</li>
+   </ul> -->
+
+
+    <table id="temperature-table">
+      <tr>
+        <th class="heading-temperature">
+          Temperature
+        </th>
+        <th class="heading-time">
+          Time
+        </th>
+      </tr>
+      <tr class="danger">
+        <td class="row-temperature"> 35 F </td>
+        <td class="row-time"> 8:12PM </td>
+      </tr>
+      <tr class="warning">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="warning">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="good">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="good">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="error" rowspan="2">
+        <td class="row-error" > ***WARNING: CENSOR OFFLINE*** </td>
+      </tr>
+      <tr class="error" rowspan="2">
+        <td class="row-error"> ***WARNING: CENSOR OFFLINE*** </td>
+      </tr>
+      <tr class="good">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="good">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="warning">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      <tr class="danger">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+
+    </table>
+
+      <!-- <ul>
+      <li class="danger">Temp. 35 at 8:12pm</li>
+      <li class="danger">Temp. 38 at 8:12pm</li>
+      <li class="warning">Temp. 41 at 8:12pm</li>
+      <li class="warning">Temp. 42 at 8:12pm</li>
+      <li class="good">Temp. 48 at 8:12pm</li>
+      <li class="good">Temp. 52 at 8:12pm</li>
+      <li class="good">Temp. 55 at 8:12pm</li>
+      <li class="error">***WARNING: CENSOR OFFLINE***</li>
+      <li class="error">***WARNING: CENSOR OFFLINE***</li>
+      <li class="error">***WARNING: CENSOR OFFLINE***</li>
+      <li class="warning">Temp. 41 at 8:12pm</li>
+      <li class="warning">Temp. 42 at 8:12pm</li>
+      <li class="warning">Temp. 41 at 8:12pm</li>
+      <li class="warning">Temp. 42 at 8:12pm</li>
+      <li class="good">Temp. 48 at 8:12pm</li>
+      <li class="good">Temp. 52 at 8:12pm</li>
+      <li class="good">Temp. 55 at 8:12pm</li>
+      </ul> -->
+
+
+
+    <!--date history, possible database -->
+		<!-- <h4 class="display-previous">Previous Temperatures....</h4> -->
+
+		<br style="clear:both;"/>
+		<div id="legend-key">
+			<h4 class="legend-title">Legend</h4>
+
+			<p><div class="legend-good-box"></div>Good</p>
+			<p><div class="legend-warning-box"></div>Warning</p>
+			<p><div class="legend-danger-box"></div>Danger</p>
+
+		</div>
+		<br />
+		<h4><a href="">Past History</a></h4>
+	</section>
+
+	<!-- faucet detail section -->
+	<section id="FaucetDetail">
+
+
+	<h2>Faucet details</h2>
+
+	<img id="faucetStatus" src="faucetOff.jpg"></img>
+	<br />
+	<article>
+	<h4>Faucet status:</h4>
+	<h2 id="status">NOT DRIPPING</h2>
+	</article>
+
+	<br />
+  <button id="button-override" class="auto" type="button">Auto</button>
+  <button id="button-override" class="on" type="button">On</button>
+  <button id="button-override" class="off" type="button">Off</button>
+
+	</section>
+
+</div>
+
+<br style="clear:both;"/>
+
+<!--
+<article>
+London is the capital city of England. It is the most populous city in the United Kingdom, with a metropolitan area of over 13 million inhabitants.
+</article> -->
+
+<script src="client/selectedFaucetReading.js"></script>
+</body>
+</html>

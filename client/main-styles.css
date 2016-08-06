@@ -1,0 +1,47 @@
+html{
+	height: 100%;
+	/*background: linear-gradient(#DAECF7, #A9DBFA, #3497D4, #07466E);
+	background: url("faucet_background.png") no-repeat;
+	background-size: 100%;*/
+	overflow-x: hidden;
+}
+
+body {
+	font-family: verdana, sans-serif;
+	font-size:0.8em;
+	color: #113952;
+}
+
+header, section, footer, aside, nav, main, article, figure, article {
+    display: block;
+}
+
+header h1{
+	margin: 2% 0 5% 28%;
+}
+
+#container{
+	width: 100%;
+	display: block;
+	padding-left: 10%;
+}
+
+a {
+	color: #4e697a;
+}
+
+[id*="button-"]{
+	text-decoration: bold;
+	text-align: center;
+	background-color: #08298A;
+	color: #f7fbfe;
+	border: none;
+	font-size: 16px;
+	padding: 15px 32px;
+	border-radius: 12px;
+}
+
+
+/* currently not working in FF */
+@import url("temperature-styles.css");
+@import url("faucet-styles.css");

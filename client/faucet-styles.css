@@ -1,0 +1,24 @@
+#FaucetDetail{
+	float: left;
+	width: 45%;
+	display: block;
+}
+
+h2.faucet-status{
+	text-decoration: bold;
+}
+
+#override{
+	text-decoration: bold;
+	text-align: center;
+	background-color: #08298A;
+	color: #f7fbfe;
+	border: none;
+	font-size: 16px;
+	padding: 15px 32px;
+	border-radius: 12px;
+}
+
+article{
+	display: inline;
+}

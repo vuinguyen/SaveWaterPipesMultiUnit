@@ -4,32 +4,77 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>Web Sockets Template</title>
-    <link rel="stylesheet" href="client/index.css"/>
+    <!--<link rel="stylesheet" href="client/index.css"/> -->
+    <link rel="stylesheet" href="main-styles.css" type="text/css">
+    <link rel="stylesheet" href="overview-styles.css" type="text/css" />
     <!--    -->
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="socket.io/socket.io.js"></script>
+    <script src="override.js" type="text/javascript"></script> <!-- Our project js file -->
 </head>
 <body>
-    <div class="title">Web Sockets Client Console</div>
-    <div class="container">
-        <span class="sub-title">Connected User(s)</span>
-        <div id="user-container">
-            <div id="u1" class="user-circle"></div>
-        </div>
+  <header>
+  	<h1>Overview Of All The Water Sensors</h1>
+  </header>
+
+<div id="container">
+
+<div id="faucet-row-1">
+  <div id="unit-information">
+    <!--<button id="button-unit1" type="button">Unit A </button> -->
+     <input type="button" id="button-unit1" onClick="parent.location='selectedFaucetReading.html'" value="Unit A"> 
+    <br class="clear:both;">
+    <button id="button-edit-sensor" type="button">Edit</button>
+    <button id="button-delete-sensor" type="button">Delete</button>
+  </div>
+  <div id="unit-details">
+    <ul>
+      <li class="unit-detail-header">Water Pipe: dripping/ not dripping</li>
+      <li class="unit-detail-header">Water Heater: leaking/ not leaking</li>
+      <li class="unit-detail-header">Washer: leaking/ not leaking</li>
+    </ul>
+  </div>
+</div>
+
+  <div id="faucet-row-2">
+    <div id="unit-information">
+        <form action="">
+        <input type="button" id="button-unit2" onClick="parent.location='selectedFaucetReading.html'" value="Unit B">
+         </form> 
+      <br class="clear:both;">
+      <button id="button-edit-sensor" type="button">Edit</button>
+      <button id="button-delete-sensor" type="button">Delete</button>
     </div>
-    <div class="container">
-        <span class="sub-title">OnBoard LED status</span>
-        <div id="led-container" class="off"><span>OFF</span></div>
-        <div id="led-link-container"><a id="led-link">Toggle LED</a></div>
+    <div id="unit-details">
+      <ul>
+        <li class="unit-detail-header">Water Pipe: dripping/ not dripping</li>
+        <li class="unit-detail-header">Water Heater: leaking/ not leaking</li>
+        <li class="unit-detail-header">Washer: leaking/ not leaking</li>
+      </ul>
+    </div>
+  </div>
+
+    <div id="faucet-row-3">
+      <div id="unit-information">
+        <!--<button id="button-unit3" type="button">Unit C </button> -->
+          <input type="button" id="button-unit3" onClick="parent.location='selectedFaucetReading.html'" value="Unit C"> 
+        <br class="clear:both;">
+        <button id="button-edit-sensor" type="button">Edit</button>
+        <button id="button-delete-sensor" type="button">Delete</button>
+      </div>
+      <div id="unit-details">
+        <ul>
+          <li class="unit-detail-header">Water Pipe: dripping/ not dripping</li>
+          <li class="unit-detail-header">Water Heater: leaking/ not leaking</li>
+          <li class="unit-detail-header">Washer: leaking/ not leaking</li>
+        </ul>
+      </div>
     </div>
 
-    <span class="log-title">Log</span>
-    <div class="log-container">    
-        <ul id="messages"></ul>
-    </div>
-    <form action="">
-        <input autocomplete="off" id="m" placeholder="Post message"><button>Send</button>
-    </form>
+<br style="clear:both;" />
+    
+    
+    
     <script src="client/index.js"></script>
 </body>
 </html>

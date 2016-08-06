@@ -1,0 +1,42 @@
+[id*="faucet-row"]{
+  float: left;
+  display:block;
+  margin: 5px 0;
+  border: solid black;
+  padding: 3%;
+  width: 50%;
+}
+
+#unit-information{
+  border-right: solid black;
+  float: left;
+}
+
+#unit-details{
+  float: left;
+  margin-left: 2%;
+
+}
+
+
+ul {
+	padding:5px;
+	list-style-type: none;
+  margin-top: 5px;
+}
+
+ul li {
+	margin:5px;
+	text-decoration: bold;
+}
+
+.unit-detail-header{
+  font-weight: bold;
+}
+
+#button-edit-sensor, #button-delete-sensor{
+	margin-top: 5px;
+  margin-right: 5px;
+	font-size: 16px;
+	padding: 5px 15px;
+}

@@ -39,6 +39,72 @@ var io = require('socket.io')(http);
 
 var connectedUsersArray = [];
 var userId;
+var lastUserId = ""; // required change to disconnect
+
+var timeOutSeconds = 3000;  // 1000 is 1 second
+
+var upm_grove = require('jsupm_grove');
+
+//setup access analog input Analog pin #0 (A0)
+var groveSlide1 = new upm_grove.GroveSlide(0);   // pin 0
+var groveSlide2 = new upm_grove.GroveSlide(1);   // pin 1
+var groveSlide3 = new upm_grove.GroveSlide(2);   // pin 2
+
+var index = 0;
+var totalVolts = 0;
+var totalSlider = 0;
+var averageVolts = 0;
+var averageSlider = 0;
+
+var sensorChosen = 0;
+var pageNumber = 1;
+
+function printSliderValues(sliderNum)
+{
+    var slider;
+    switch(sliderNum) 
+    {
+        case 1:
+        {
+            slider = groveSlide1;
+            break;
+        }
+        case 2: 
+        {
+            slider = groveSlide2;
+            break;
+        }
+        case 3:
+        {
+            slider = groveSlide3;
+            break;
+        }
+    }
+    console.log("Slider value " + sliderNum + ": " + slider.voltage_value().toFixed(2) + " V");
+}
+
+
+function tempLoop() 
+{
+    // for now, we will display each sensor value in turn, just the raw values
+    //console.log("Slider value 1: " + groveSlide1.voltage_value().toFixed(2) + " V");
+    //console.log("Slider value 2: " + groveSlide2.voltage_value().toFixed(2) + " V");
+    //console.log("Slider value 3: " + groveSlide3.voltage_value().toFixed(2) + " V");
+    
+    if (sensorChosen == 0)
+    {
+        printSliderValues(1);
+        printSliderValues(2);
+        printSliderValues(3);
+        console.log('\n');
+    }
+    else
+    {
+        printSliderValues(sensorChosen);
+    }
+    // wait specified timeout then call function again
+    setTimeout(tempLoop, timeOutSeconds);
+}
 
 app.get('/', function(req, res) {
     //Join all arguments together and normalize the resulting path.
@@ -66,11 +132,38 @@ io.on('connection', function(socket) {
     console.log('User(s) Connected: ' + connectedUsersArray);
     io.emit('connected users', connectedUsersArray);
     
+    // once we're connected, start the loop
+    tempLoop();
+    
+    /*
     socket.on('user disconnect', function(msg) {
         console.log('remove: ' + msg);
         connectedUsersArray.splice(connectedUsersArray.lastIndexOf(msg), 1);
         io.emit('user disconnect', msg);
     });
+    */
+    
+    // Note: In order for the original webserver application worked, the client 
+    // really needed to send a 'user disconnect' message first before it can send
+    // a disconnect message. Before, the client tried to send only a 'user disconnect' 
+    // message but there was 'disconnect' message, and so the client (web or mobile) never 
+    //  really disconnected. I fixed that problem with my implementation.
+    
+    socket.on('user disconnect', function(msg) {
+        lastUserId = msg;
+        io.emit('user disconnect', msg);
+    });
+    
+    socket.on('disconnect', function(msg) { 
+        if (msg) {lastUserId = msg;}
+        console.log('remove: ' + lastUserId);
+        connectedUsersArray.splice(connectedUsersArray.lastIndexOf(lastUserId), 1);
+        //io.emit('user disconnect', lastUserId);
+        lastUserId = "";
+});
+    
+   // Required changes to actually disconnect: END 
+    
     
     socket.on('chat message', function(msg) {
         io.emit('chat message', msg);
@@ -82,6 +175,17 @@ io.on('connection', function(socket) {
         msg.value = ledState;
         io.emit('toogle led', msg);
         ledState = !ledState; //invert the ledState
+    });
+    
+    socket.on('choose sensor', function(msg) {
+        console.log("Sensor Chosen is: " + msg.value); 
+        sensorChosen = msg.value;
+    });
+    
+    socket.on('page number', function(msg) {
+        console.log("Page number is: " + msg.value); 
+        pageNumber = msg.value;
+        if (pageNumber == 1) { sensorChosen = 0; }
     });
     
 });
