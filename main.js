@@ -52,28 +52,43 @@ var valveState1 = false;
 var valveState2 = false;
 var valveState3 = false;
 
-function unit(unitLetter, slider, valve, valveState) {
+function unit(unitNum, unitLetter, slider, valve, valveState, severity) {
+    this.unitNum = unitNum;
     this.unitLetter = unitLetter;
     this.slider = slider;
     this.valve = valve;
     this.valveState = valveState;
+    this.severity = severity;
 };
 
-var unit1 = new unit("A", groveSlide1, valve1, valveState1);
-var unit2 = new unit("B", groveSlide2, valve2, valveState2);
-var unit3 = new unit("C", groveSlide2, valve3, valveState3);
+var unit1 = new unit(1, "A", groveSlide1, valve1, valveState1, 1);
+var unit2 = new unit(2, "B", groveSlide2, valve2, valveState2, 1);
+var unit3 = new unit(3, "C", groveSlide3, valve3, valveState3, 1);
 
-var currentSensor = 0;
+var unitArray = [unit1, unit2, unit3];
+
+function whichUnit(unitNum) {
+    switch(unitNum)
+    {
+        case 1:
+        {   return unit1; break; }
+        case 2:
+        {   return unit2; break;  }
+        case 3:
+        {   return unit3; break;  }
+        default:
+        {   return selectedUnit; break;   }
+    }
+}
+
+var selectedUnit = null;   // a null object
 var pageNumber = 1;
+var timeOutSeconds = 3000;  // 1000 is 1 second
 
-var rawSlider = 0;
-var volts = 0;
 var thresholdValue = 0.5;
 var ratio = 1/5;            // used to convert slider values to temp
 var constant = -36;         // used to convert slider values to temp
 var firstTemp = true;       // is this the first temperature reading?
-
-var timeOutSeconds = 3000;  // 1000 is 1 second
 
 var criticalTemp = 33;
 var warningTemp = 38;
@@ -82,12 +97,17 @@ var offLineTemp = 10;
 var averageItemCount = 5;
 var averageCounter = 0;
 
+// Gotta figure out what to do with all these variables: BEGIN
+var rawSlider = 0;
+var volts = 0;
+
 var totalVolts = 0;
 var totalSlider = 0;
 var totalTemp = 0;
 var averageVolts = 0;
 var averageSlider = 0;
 var averageTemp = 0;
+// Gotta figure out what to do with all these variables: END
 
 var lcd = require('./lcd');
 var display = new lcd.LCD(0);   // 12C socket  
@@ -116,9 +136,10 @@ function setLCDColor(inSeverity)
 
 
 
-function toggleValve(valveNum)
+function toggleValve(inputUnit)
 {
     //var currentValve;
+    /*
     switch(valveNum)
     {
         case 1:
@@ -143,59 +164,73 @@ function toggleValve(valveNum)
             break;    
         }
     }
+    */
+    inputUnit.valveState = !inputUnit.valveState;
+    if (inputUnit.valveState == true) { inputUnit.valve.on(); }
+    else { inputUnit.valve.off(); }
 }
 
-function printSliderValues(sliderNum)
+//function printSliderValues(sliderNum)
+function printSliderValues(inputUnit)
 {
-    var slider;
-    switch(sliderNum) 
-    {
-        case 1:
-        {
-            slider = groveSlide1;
-            break;
-        }
-        case 2: 
-        {
-            slider = groveSlide2;
-            break;
-        }
-        case 3:
-        {
-            slider = groveSlide3;
-            break;
-        }
-    }
-    console.log("Slider value " + sliderNum + ": " + slider.voltage_value().toFixed(2) + " V");
+    console.log("Slider value " + inputUnit.unitNum + ": " + inputUnit.slider.voltage_value().toFixed(2) + " V");
 }
 
-
-function temperatureLoop() 
+//var currentUnitNum = 1;
+//function temperatureLoop(currentUnitNum) 
+function temperatureLoop()
 {
     // for now, we will display each sensor value in turn, just the raw values
     //console.log("Slider value 1: " + groveSlide1.voltage_value().toFixed(2) + " V");
     //console.log("Slider value 2: " + groveSlide2.voltage_value().toFixed(2) + " V");
     //console.log("Slider value 3: " + groveSlide3.voltage_value().toFixed(2) + " V");
     
-    if (currentSensor == 0)
+    //*/
+    if (selectedUnit == null)
     {
-        printSliderValues(1);
-        printSliderValues(2);
-        printSliderValues(3);
+        console.log("we got here");
+        printSliderValues(unit1);
+        printSliderValues(unit2);
+        printSliderValues(unit3);
         console.log('\n');
     }
     else
     {
-        printSliderValues(currentSensor);
+        console.log("no, we got here");
+        printSliderValues(selectedUnit);
     }
+    /*/
+    //var unit = whichUnit(currentUnitNum);
+    
+    /*
+    var unit = unit1;
+    //console.log("temp loop, currentUnitNum: " + currentUnitNum);
+    console.log("temp loop, inputUnit: " + inputUnit);
+    console.log("temp loop, inputUnit: " + inputUnit.unitNum);
+    console.log("temp loop, inputUnit.slider: " + inputUnit.slider);
+    //*/
+    /*
+    if ((selectedUnit == null) || (selectedUnit == inputUnit))
+        {
+                 printSliderValues(inputUnit);
+        }
+    */
     // wait specified timeout then call function again
     //setTimeout(temperatureLoop, timeOutSeconds);
 }
 
 function mainLoop()
 {
+    // or any of this
+   //for (var i = 1; i < 4; i++)
+   // {
+        //currentUnitNum = i;
+        //setTimeout(temperatureLoop, 500);   // half a second
+       // temperatureLoop(1);
+    //temperatureLoop(unitArray[i]);    // it doesn't like this
     temperatureLoop();
-    setTimeout(mainLoop, timeOutSeconds);
+    //}
+    setTimeout(mainLoop, timeOutSeconds); 
 }
 
 function getTemperature(rawSlider) 
@@ -279,15 +314,15 @@ io.on('connection', function(socket) {
 });
    // Required changes to actually disconnect: END 
     
-    socket.on('choose sensor', function(msg) {
-        console.log("Sensor Chosen is: " + msg.value); 
-        currentSensor = msg.value;
+    socket.on('select unit', function(msg) {
+        console.log("Unit Selected Is: " + msg.value); 
+        selectedUnit = whichUnit(msg.value);
     });
     
     socket.on('page number', function(msg) {
         console.log("Page number is: " + msg.value); 
         pageNumber = msg.value;
-        if (pageNumber == 1) { currentSensor = 0; }
+        if (pageNumber == 1) { selectedUnit = null; }
     });
     
 });

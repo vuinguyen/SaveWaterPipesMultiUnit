@@ -1,35 +1,16 @@
 var socket = io();
 var userId = "user";
 
-/*
-$('form').submit(function() {
-    socket.emit('chat message', {value: $('#m').val(), userId: userId});
-    $('#m').val('');
-    return false;
-});
-*/
-
-$('form').submit(function() {
-    //socket.emit('chat message', {value: $('#m').val(), userId: userId});
-    //$('#m').val('');
-    //return false;
-    socket.emit('choose sensor', {value: 2});
-});
-
-$("#led-link").on('click', function(e){
-    socket.emit('toogle led', {value: 0, userId: userId});
-});
-
 $("#button-unit1").on('click', function(e){
-    socket.emit('choose sensor', {value: 1});
+    socket.emit('select unit', {value: 1});
 });
 
 $("#button-unit2").on('click', function(e){
-    socket.emit('choose sensor', {value: 2});
+    socket.emit('select unit', {value: 2});
 });
 
 $("#button-unit3").on('click', function(e){
-    socket.emit('choose sensor', {value: 3});
+    socket.emit('select unit', {value: 3});
 });
 
 socket.on('toogle led', function(msg) {
