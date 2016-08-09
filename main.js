@@ -26,10 +26,6 @@ Review README.md file for in-depth information about web sockets communication
 
 var mraa = require('mraa'); //require mraa
 console.log('MRAA Version: ' + mraa.getVersion()); //write the mraa version to the Intel XDK console
-//var myOnboardLed = new mraa.Gpio(3, false, true); //LED hooked up to digital pin (or built in pin on Galileo Gen1)
-var myOnboardLed = new mraa.Gpio(13); //LED hooked up to digital pin 13 (or built in pin on Intel Galileo Gen2 as well as Intel Edison)
-myOnboardLed.dir(mraa.DIR_OUT); //set the gpio direction to output
-var ledState = true; //Boolean to hold the state of Led
 
 var express = require('express');
 var app = express();
@@ -56,7 +52,18 @@ var valveState1 = false;
 var valveState2 = false;
 var valveState3 = false;
 
-var sensorChosen = 0;
+function unit(unitLetter, slider, valve, valveState) {
+    this.unitLetter = unitLetter;
+    this.slider = slider;
+    this.valve = valve;
+    this.valveState = valveState;
+};
+
+var unit1 = new unit("A", groveSlide1, valve1, valveState1);
+var unit2 = new unit("B", groveSlide2, valve2, valveState2);
+var unit3 = new unit("C", groveSlide2, valve3, valveState3);
+
+var currentSensor = 0;
 var pageNumber = 1;
 
 var rawSlider = 0;
@@ -170,7 +177,7 @@ function temperatureLoop()
     //console.log("Slider value 2: " + groveSlide2.voltage_value().toFixed(2) + " V");
     //console.log("Slider value 3: " + groveSlide3.voltage_value().toFixed(2) + " V");
     
-    if (sensorChosen == 0)
+    if (currentSensor == 0)
     {
         printSliderValues(1);
         printSliderValues(2);
@@ -179,7 +186,7 @@ function temperatureLoop()
     }
     else
     {
-        printSliderValues(sensorChosen);
+        printSliderValues(currentSensor);
     }
     // wait specified timeout then call function again
     //setTimeout(temperatureLoop, timeOutSeconds);
@@ -270,31 +277,17 @@ io.on('connection', function(socket) {
         //io.emit('user disconnect', lastUserId);
         lastUserId = "";
 });
-    
    // Required changes to actually disconnect: END 
-    
-    
-    socket.on('chat message', function(msg) {
-        io.emit('chat message', msg);
-        console.log('message: ' + msg.value);
-    });
-    
-    socket.on('toogle led', function(msg) {
-        myOnboardLed.write(ledState?1:0); //if ledState is true then write a '1' (high) otherwise write a '0' (low)
-        msg.value = ledState;
-        io.emit('toogle led', msg);
-        ledState = !ledState; //invert the ledState
-    });
     
     socket.on('choose sensor', function(msg) {
         console.log("Sensor Chosen is: " + msg.value); 
-        sensorChosen = msg.value;
+        currentSensor = msg.value;
     });
     
     socket.on('page number', function(msg) {
         console.log("Page number is: " + msg.value); 
         pageNumber = msg.value;
-        if (pageNumber == 1) { sensorChosen = 0; }
+        if (pageNumber == 1) { currentSensor = 0; }
     });
     
 });
