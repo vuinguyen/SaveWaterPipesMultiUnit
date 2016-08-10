@@ -13,6 +13,7 @@ $("#button-unit3").on('click', function(e){
     socket.emit('select unit', {value: 3});
 });
 
+/*
 socket.on('toogle led', function(msg) {
     if(msg.value === false) {
         $('#messages').prepend($('<li>Toogle LED: OFF<span> - '+msg.userId+'</span></li>'));
@@ -31,6 +32,7 @@ socket.on('toogle led', function(msg) {
 socket.on('chat message', function(msg) {
     $('#messages').prepend($('<li>'+msg.value+'<span> - '+msg.userId+'</span></li>'));
 });
+*/
 
 socket.on('connected users', function(msg) {
     $('#user-container').html("");

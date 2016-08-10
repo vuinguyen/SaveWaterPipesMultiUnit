@@ -59,6 +59,24 @@ function unit(unitNum, unitLetter, slider, valve, valveState, severity) {
     this.valve = valve;
     this.valveState = valveState;
     this.severity = severity;
+    
+    // keep track of internal values as we're doing calculations
+    // in temperatureLoop()
+    this.currentRawSlider = 0;
+    this.currentVolts = 0;
+    
+    this.rawSlider = 0;
+    this.volts = 0;
+
+    this.totalVolts = 0;
+    this.totalSlider = 0;
+    this.totalTemp = 0;
+    
+    this.averageVolts = 0;
+    this.averageSlider = 0;
+    this.averageTemp = 0;
+    
+    this.averageCounter = 0;   
 };
 
 var unit1 = new unit(1, "A", groveSlide1, valve1, valveState1, 1);
@@ -85,7 +103,7 @@ var selectedUnit = null;   // a null object
 var pageNumber = 1;
 var timeOutSeconds = 3000;  // 1000 is 1 second
 
-var thresholdValue = 0.5;
+var thresholdValue = 0.5;   // threshold of whether values changed enough for calculations
 var ratio = 1/5;            // used to convert slider values to temp
 var constant = -36;         // used to convert slider values to temp
 var firstTemp = true;       // is this the first temperature reading?
@@ -94,21 +112,11 @@ var criticalTemp = 33;
 var warningTemp = 38;
 var offLineTemp = 10; 
 
-var averageItemCount = 5;
-var averageCounter = 0;
+var averageItemCount = 5;   // the number of values required to find an average
+ 
 
-// Gotta figure out what to do with all these variables: BEGIN
-var rawSlider = 0;
-var volts = 0;
-
-var totalVolts = 0;
-var totalSlider = 0;
-var totalTemp = 0;
-var averageVolts = 0;
-var averageSlider = 0;
-var averageTemp = 0;
-// Gotta figure out what to do with all these variables: END
-
+// We may not need LCDs for multi-unit demo unless we have at least three
+// LCD code: BEGINS
 var lcd = require('./lcd');
 var display = new lcd.LCD(0);   // 12C socket  
 
@@ -133,51 +141,56 @@ function setLCDColor(inSeverity)
     
     display.setColor(red, green, blue);
 };
-
+// LCD code: ENDS
 
 
 function toggleValve(inputUnit)
 {
-    //var currentValve;
-    /*
-    switch(valveNum)
-    {
-        case 1:
-        {   //currentValve = valve1; 
-            valveState1 = !valveState1;
-            if (valveState1 == true) { valve1.on() }
-            else { valve1.off(); }
-            break;   
-        }
-        case 2:
-        {   //currentValve = valve2; 
-            valveState2 = !valveState2;
-            if (valveState2 == true) { valve2.on() }
-            else { valve2.off(); }
-            break;    
-        }
-        case 3:
-        {   //currentValve = valve3; 
-            valveState3 = !valveState3;
-            if (valveState3 == true) { valve3.on() }
-            else { valve3.off(); }
-            break;    
-        }
-    }
-    */
     inputUnit.valveState = !inputUnit.valveState;
     if (inputUnit.valveState == true) { inputUnit.valve.on(); }
     else { inputUnit.valve.off(); }
 }
 
+// we must update the website whenever the valve opens or closes
+function printValveInfo() 
+{
+    
+}
+
+function openValve(inputUnit)
+{
+    printValveInfo();
+    inputUnit.valve.on();
+    //inputUnit.valveState = false;
+    console.log("Unit " + inputUnit.unitNum + ": valve open");
+}
+
+function closeValve(inputUnit)
+{
+    printValveInfo();
+    inputUnit.valve.close();
+    //inputUnit.valveState = true;
+    console.log("Unit " + inputUnit.unitNum + ": valve closed");
+}
+
 //function printSliderValues(sliderNum)
 function printSliderValues(inputUnit)
 {
-    console.log("Slider value " + inputUnit.unitNum + ": " + inputUnit.slider.voltage_value().toFixed(2) + " V");
+    console.log("Slider value " + inputUnit.unitLetter + ": " + inputUnit.slider.voltage_value().toFixed(2) + " V");
+}
+ 
+function printSensorInfo(inputUnit, inTemp, inSeverity, average)
+{
+    // print to console
+    var consoleDisplay = (average) ? "Unit: " + inputUnit.unitLetter + ", Average temp: " + inTemp + " F" + ", Severity: " + inSeverity + "\n" : 
+    "Unit: " + inputUnit.unitLetter + ", Current temp: " + inTemp + " F" + ", Severity: " + inSeverity + "\n";
+    console.log(consoleDisplay);
+    
+    // print to website
+    
+    // print to LCD Display
 }
 
-//var currentUnitNum = 1;
-//function temperatureLoop(currentUnitNum) 
 function temperatureLoop()
 {
     // for now, we will display each sensor value in turn, just the raw values
@@ -186,6 +199,103 @@ function temperatureLoop()
     //console.log("Slider value 3: " + groveSlide3.voltage_value().toFixed(2) + " V");
     
     //*/
+    // can I do a loop here? yes!
+    // go through this logic for all three units
+    for (var i = 0; i < 3; i++)
+    {
+        unitArray[i].currentRawSlider = unitArray[i].slider.raw_value();
+        unitArray[i].currentVolts     = unitArray[i].slider.voltage_value();
+        
+        // if this is the first temp value or we've hit greater than the threshold
+        if ((firstTemp == true) || 
+            (Math.abs(unitArray[i].currentVolts - unitArray[i].volts) > thresholdValue))
+        {
+            unitArray[i].rawSlider = unitArray[i].currentRawSlider;
+            unitArray[i].volts     = unitArray[i].currentVolts;
+            
+            // print values depending on selected unit
+            if ((selectedUnit == null) || (selectedUnit == unitArray[i]))
+            {
+                var temp     = getTemperature(unitArray[i].rawSlider);
+                var severity = getSeverity(temp);
+                //printSliderValues(unitArray[i]);
+                printSensorInfo(unitArray[i], temp, severity);
+            }
+            firstTemp = false;
+        }
+        // we are at or less than the threshold value
+        else if (Math.abs(unitArray[i].currentVolts - unitArray[i].volts) <= thresholdValue) 
+            {
+                unitArray[i].rawSlider = unitArray[i].currentRawSlider;
+                unitArray[i].volts     = unitArray[i].currentVolts;
+                
+                unitArray[i].totalVolts  = unitArray[i].volts + unitArray[i].totalVolts;
+                unitArray[i].totalSlider = unitArray[i].rawSlider + unitArray[i].totalSlider;
+                
+                var temp = getTemperature(unitArray[i].rawSlider);
+                unitArray[i].totalTemp = parseFloat(temp) + parseFloat(unitArray[i].totalTemp);
+                //console.log("Unit: "+ unitArray[i] + ", Temp: " + temp + ", totalTemp: " + unitArray[i].totalTemp + "\n");
+                
+                // and then check for counter
+                if (unitArray[i].averageCounter == averageItemCount)
+                {
+                    // and then find your average
+                    unitArray[i].averageVolts = (unitArray[i].totalVolts / averageItemCount);
+                    unitArray[i].averageSlider = (unitArray[i].totalSlider / averageItemCount);
+                    unitArray[i].averageTemp = (unitArray[i].totalTemp / averageItemCount).toPrecision(3);
+                    
+                    var averageSeverity = getSeverity(unitArray[i].averageTemp);
+                    
+                    // print values depending on selected unit
+                    if ((selectedUnit == null) || (selectedUnit == unitArray[i]))
+                    {
+                        // this needs work
+                        //printSliderValues(unitArray[i]);
+                        printSensorInfo(unitArray[i], unitArray[i].averageTemp, averageSeverity, 1);
+                    }
+                  
+                    // if valve is open close it
+                    if ((unitArray[i].averageSeverity <= 2) && (unitArray[i].valveState == true))
+                    {
+                        // close the valve
+                        // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
+                        unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
+                        closeValve(unitArray[i]);
+                    }    
+                    // if valve is closed, open it
+                  
+                    if ((unitArray[i].averageSeverity == 3) && (unitArray[i].valveState == false))
+                    {
+                        // open the valve
+                        // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
+                        console.log("Unit " + inputUnit.unitNum + ": valve open");
+                        openValve(unitArray[i]);
+                    } 
+                  
+                    // reset all variables for that unit  
+                    unitArray[i].totalSlider    = 0;
+                    unitArray[i].totalVolts     = 0;
+                    unitArray[i].totalTemp      = 0;
+                    
+                    unitArray[i].averageSlider  = 0;
+                    unitArray[i].averageVolts   = 0;
+                    unitArray[i].averageTemp    = 0;
+                    
+                    unitArray[i].averageCounter = 0;  
+                } // end check for counter
+                
+                unitArray[i].averageCounter++;
+            }
+    }   // end for loop for all three units
+    
+    /*
+     if ((selectedUnit == null) || (selectedUnit == unitArray[i]))
+        {
+                 printSliderValues(unitArray[i]);
+        }
+    */
+    
+    /*
     if (selectedUnit == null)
     {
         console.log("we got here");
@@ -199,37 +309,23 @@ function temperatureLoop()
         console.log("no, we got here");
         printSliderValues(selectedUnit);
     }
-    /*/
-    //var unit = whichUnit(currentUnitNum);
-    
-    /*
-    var unit = unit1;
-    //console.log("temp loop, currentUnitNum: " + currentUnitNum);
-    console.log("temp loop, inputUnit: " + inputUnit);
-    console.log("temp loop, inputUnit: " + inputUnit.unitNum);
-    console.log("temp loop, inputUnit.slider: " + inputUnit.slider);
-    //*/
-    /*
-    if ((selectedUnit == null) || (selectedUnit == inputUnit))
-        {
-                 printSliderValues(inputUnit);
-        }
     */
+    
+    
+    // I don't know if this will work, don't try it!
     // wait specified timeout then call function again
     //setTimeout(temperatureLoop, timeOutSeconds);
 }
 
 function mainLoop()
 {
-    // or any of this
+    // None of this works, don't do it!
    //for (var i = 1; i < 4; i++)
    // {
-        //currentUnitNum = i;
-        //setTimeout(temperatureLoop, 500);   // half a second
-       // temperatureLoop(1);
     //temperatureLoop(unitArray[i]);    // it doesn't like this
-    temperatureLoop();
     //}
+    
+    temperatureLoop();
     setTimeout(mainLoop, timeOutSeconds); 
 }
 
