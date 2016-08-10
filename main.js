@@ -75,6 +75,7 @@ function unit(unitNum, unitLetter, slider, valve, valveState, severity) {
     this.averageVolts = 0;
     this.averageSlider = 0;
     this.averageTemp = 0;
+    this.averageSeverity = 0;
     
     this.averageCounter = 0;   
 };
@@ -115,7 +116,7 @@ var offLineTemp = 10;
 var averageItemCount = 5;   // the number of values required to find an average
  
 
-// We may not need LCDs for multi-unit demo unless we have at least three
+// We may not need LCDs for multi-unit demo unless we have at least three LCDs
 // LCD code: BEGINS
 var lcd = require('./lcd');
 var display = new lcd.LCD(0);   // 12C socket  
@@ -143,7 +144,7 @@ function setLCDColor(inSeverity)
 };
 // LCD code: ENDS
 
-
+// this method might be OBE
 function toggleValve(inputUnit)
 {
     inputUnit.valveState = !inputUnit.valveState;
@@ -152,28 +153,29 @@ function toggleValve(inputUnit)
 }
 
 // we must update the website whenever the valve opens or closes
+// for the first and the second page
 function printValveInfo() 
 {
-    
+    io.emit('toggle valve', {unitNum: inputUnit.unitNum, valveState: inputUnit.valveState});
 }
 
 function openValve(inputUnit)
 {
-    printValveInfo();
+    printValveInfo(inputUnit);
     inputUnit.valve.on();
-    //inputUnit.valveState = false;
-    console.log("Unit " + inputUnit.unitNum + ": valve open");
+    //inputUnit.valveState = false; // this doesn't work here
+    console.log("Unit " + inputUnit.unitLetter + ": valve open");
 }
 
 function closeValve(inputUnit)
 {
-    printValveInfo();
-    inputUnit.valve.close();
-    //inputUnit.valveState = true;
-    console.log("Unit " + inputUnit.unitNum + ": valve closed");
+    printValveInfo(inputUnit);
+    inputUnit.valve.off();
+    //inputUnit.valveState = true;  // this doesn't work here
+    console.log("Unit " + inputUnit.unitLetter + ": valve closed");
 }
 
-//function printSliderValues(sliderNum)
+//this function is good for testing purposes
 function printSliderValues(inputUnit)
 {
     console.log("Slider value " + inputUnit.unitLetter + ": " + inputUnit.slider.voltage_value().toFixed(2) + " V");
@@ -187,19 +189,12 @@ function printSensorInfo(inputUnit, inTemp, inSeverity, average)
     console.log(consoleDisplay);
     
     // print to website
-    
-    // print to LCD Display
+    io.emit('temp value', {unitNum: inputUnit.unitNum, temp: inTemp, severity: inSeverity});
+    // print to LCD Display (nice to have)
 }
 
 function temperatureLoop()
 {
-    // for now, we will display each sensor value in turn, just the raw values
-    //console.log("Slider value 1: " + groveSlide1.voltage_value().toFixed(2) + " V");
-    //console.log("Slider value 2: " + groveSlide2.voltage_value().toFixed(2) + " V");
-    //console.log("Slider value 3: " + groveSlide3.voltage_value().toFixed(2) + " V");
-    
-    //*/
-    // can I do a loop here? yes!
     // go through this logic for all three units
     for (var i = 0; i < 3; i++)
     {
@@ -219,6 +214,8 @@ function temperatureLoop()
                 var temp     = getTemperature(unitArray[i].rawSlider);
                 var severity = getSeverity(temp);
                 //printSliderValues(unitArray[i]);
+                
+                // Question: should this temp and severity go into the unit calculation?
                 printSensorInfo(unitArray[i], temp, severity);
             }
             firstTemp = false;
@@ -244,14 +241,13 @@ function temperatureLoop()
                     unitArray[i].averageSlider = (unitArray[i].totalSlider / averageItemCount);
                     unitArray[i].averageTemp = (unitArray[i].totalTemp / averageItemCount).toPrecision(3);
                     
-                    var averageSeverity = getSeverity(unitArray[i].averageTemp);
+                    unitArray[i].averageSeverity = getSeverity(unitArray[i].averageTemp);
                     
                     // print values depending on selected unit
                     if ((selectedUnit == null) || (selectedUnit == unitArray[i]))
                     {
-                        // this needs work
-                        //printSliderValues(unitArray[i]);
-                        printSensorInfo(unitArray[i], unitArray[i].averageTemp, averageSeverity, 1);
+                        printSensorInfo(unitArray[i], unitArray[i].averageTemp, 
+                                        unitArray[i].averageSeverity, 1);
                     }
                   
                     // if valve is open close it
@@ -268,7 +264,7 @@ function temperatureLoop()
                     {
                         // open the valve
                         // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
-                        console.log("Unit " + inputUnit.unitNum + ": valve open");
+                        unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
                         openValve(unitArray[i]);
                     } 
                   
@@ -287,30 +283,6 @@ function temperatureLoop()
                 unitArray[i].averageCounter++;
             }
     }   // end for loop for all three units
-    
-    /*
-     if ((selectedUnit == null) || (selectedUnit == unitArray[i]))
-        {
-                 printSliderValues(unitArray[i]);
-        }
-    */
-    
-    /*
-    if (selectedUnit == null)
-    {
-        console.log("we got here");
-        printSliderValues(unit1);
-        printSliderValues(unit2);
-        printSliderValues(unit3);
-        console.log('\n');
-    }
-    else
-    {
-        console.log("no, we got here");
-        printSliderValues(selectedUnit);
-    }
-    */
-    
     
     // I don't know if this will work, don't try it!
     // wait specified timeout then call function again
@@ -409,6 +381,14 @@ io.on('connection', function(socket) {
         lastUserId = "";
 });
    // Required changes to actually disconnect: END 
+    
+    socket.on('open valve', function(msg) {
+        io.emit('open valve', msg);
+    });
+    
+    socket.on('close valve', function(msg) {
+        io.emit('close valve', msg);
+    });
     
     socket.on('select unit', function(msg) {
         console.log("Unit Selected Is: " + msg.value); 

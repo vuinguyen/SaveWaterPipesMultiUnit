@@ -1,7 +1,7 @@
 var socket = io();
 var userId = "user";
 
-
+/*
 $('form').submit(function() {
     socket.emit('chat message', {value: $('#m').val(), userId: userId});
     $('#m').val('');
@@ -29,6 +29,40 @@ socket.on('toogle led', function(msg) {
 
 socket.on('chat message', function(msg) {
     $('#messages').prepend($('<li>'+msg.value+'<span> - '+msg.userId+'</span></li>'));
+});
+*/
+
+socket.on('temp value', function(msg) {
+    var now = new Date();
+    var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    //$('#temperature-table').prepend($('Testing'));
+    console.log("From page 2: unitNum is: " + msg.unitNum + ", temp is: " + msg.temp);
+    
+    
+    /*
+    <tr class="warning">
+        <td class="row-temperature"> 38 F </td>
+        <td class="row-time"> 8:15PM </td>
+      </tr>
+      */
+});
+
+$("#button-on").on('click', function(e){
+    socket.emit('open valve', {value: 0, userId: userId});
+});
+
+$("#button-off").on('click', function(e){
+    socket.emit('close valve', {value: 0, userId: userId});
+});
+
+socket.on('open valve', function(msg) {
+        $("#status").text("DRIPPING");
+		$("#faucetStatus").attr("src","faucetOn.jpg");  
+});
+    
+socket.on('close valve', function(msg) {
+        $("#status").text("NOT DRIPPING");
+		$("#faucetStatus").attr("src","faucetOff.jpg"); 
 });
 
 socket.on('connected users', function(msg) {
