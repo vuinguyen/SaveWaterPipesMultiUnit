@@ -22,3 +22,9 @@ h2.faucet-status{
 article{
 	display: inline;
 }
+
+/* Vui's change */
+#temperature-table {
+    height: 10em;
+    overflow-y: scroll;
+}

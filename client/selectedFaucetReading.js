@@ -1,5 +1,7 @@
 var socket = io();
 var userId = "user";
+var valveState = false; // valve is currently closed
+var selectedUnitNum = 1;   // by default, we pick the first one
 
 /*
 $('form').submit(function() {
@@ -35,10 +37,22 @@ socket.on('chat message', function(msg) {
 socket.on('temp value', function(msg) {
     var now = new Date();
     var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-    //$('#temperature-table').prepend($('Testing'));
-    console.log("From page 2: unitNum is: " + msg.unitNum + ", temp is: " + msg.temp);
     
+    // console logs don't actually get displayed from here
+    console.log("From page 2: unitNum is: " + msg.unitNum + ", temp is: " + msg.temp); 
     
+    if (msg.severity == 1)
+    {
+        $('#temperature-table').prepend($('<tr class="good"><td class="row-temperature">'+msg.temp+' F</td><td class="row-time">'+time+'</td></tr>'));
+    }
+    else if (msg.severity == 2)
+    {
+         $('#temperature-table').prepend($('<tr class="warning"><td class="row-temperature">'+msg.temp+' F</td><td class="row-time">'+time+'</td></tr>'));   
+    }
+    else if (msg.severity == 3)
+    {
+        $('#temperature-table').prepend($('<tr class="danger"><td class="row-temperature">'+msg.temp+' F</td><td class="row-time">'+time+'</td></tr>'));
+    }
     /*
     <tr class="warning">
         <td class="row-temperature"> 38 F </td>
@@ -48,23 +62,47 @@ socket.on('temp value', function(msg) {
 });
 
 $("#button-on").on('click', function(e){
-    socket.emit('open valve', {value: 0, userId: userId});
+    socket.emit('open valve', {selectedUnitNum: selectedUnitNum});
 });
 
 $("#button-off").on('click', function(e){
-    socket.emit('close valve', {value: 0, userId: userId});
+    socket.emit('close valve', {selectedUnitNumNum: selectedUnitNumNum});
 });
 
+function openValve()
+{
+    $("#status").text("DRIPPING");
+    $("#faucetStatus").attr("src","faucetOn.jpg"); 
+};
+
+function closeValve()
+{
+    $("#status").text("NOT DRIPPING");
+    $("#faucetStatus").attr("src","faucetOff.jpg"); 
+};
+
 socket.on('open valve', function(msg) {
-        $("#status").text("DRIPPING");
-		$("#faucetStatus").attr("src","faucetOn.jpg");  
+    valveState = !valveState;
+    openValve();   
 });
     
 socket.on('close valve', function(msg) {
-        $("#status").text("NOT DRIPPING");
-		$("#faucetStatus").attr("src","faucetOff.jpg"); 
+    valveState = !valveState;
+    closeValve();  
 });
 
+socket.on('toggle valve', function(msg) {
+    if (msg.valveState == true)
+    {
+        openValve();
+    }
+    else 
+    {
+        closeValve();   
+    }
+});
+
+// this may be OBE: BEGIN
 socket.on('connected users', function(msg) {
     $('#user-container').html("");
     for(var i = 0; i < msg.length; i++) {
@@ -75,12 +113,30 @@ socket.on('connected users', function(msg) {
             $('#user-container').append($("<div id='" + msg[i] + "' class='user-circle'><span>"+msg[i]+"</span></div>"));
     }
 });
+// this may be OBE: END
 
 socket.on('user connect', function(msg) {
     if(userId === "user"){
         console.log("Client side userId: "+msg);
         userId = msg;
     }
+    socket.emit("check unit", userId);
+});
+
+// from here, we get the unit selected and the state of the unit's valve
+socket.on('check unit', function(msg) {
+    selectedUnitNum = msg.unitNum;
+    valveState = msg.valveState;
+    
+    if (msg.valveState == true)
+    {
+        openValve();
+    }
+    else 
+    {
+        closeValve();   
+    }
+    
 });
 
 socket.on('user disconnect', function(msg) {

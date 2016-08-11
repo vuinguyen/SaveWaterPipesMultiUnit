@@ -58,7 +58,7 @@ function unit(unitNum, unitLetter, slider, valve, valveState, severity) {
     this.slider = slider;
     this.valve = valve;
     this.valveState = valveState;
-    this.severity = severity;
+    this.severity = severity;   // 1 = good, 2 = warning, 3 = danger
     
     // keep track of internal values as we're doing calculations
     // in temperatureLoop()
@@ -154,7 +154,7 @@ function toggleValve(inputUnit)
 
 // we must update the website whenever the valve opens or closes
 // for the first and the second page
-function printValveInfo() 
+function printValveInfo(inputUnit) 
 {
     io.emit('toggle valve', {unitNum: inputUnit.unitNum, valveState: inputUnit.valveState});
 }
@@ -377,22 +377,34 @@ io.on('connection', function(socket) {
         if (msg) {lastUserId = msg;}
         console.log('remove: ' + lastUserId);
         connectedUsersArray.splice(connectedUsersArray.lastIndexOf(lastUserId), 1);
-        //io.emit('user disconnect', lastUserId);
         lastUserId = "";
 });
    // Required changes to actually disconnect: END 
     
     socket.on('open valve', function(msg) {
-        io.emit('open valve', msg);
+        // let's connect it to actually opening a valve here yeah?
+        var unitSelected = whichUnit(msg.selectedUnitNum);
+        unitSelected.valveState = true;
+        openValve(unitSelected);
+        //io.emit('open valve', msg);
     });
     
     socket.on('close valve', function(msg) {
-        io.emit('close valve', msg);
+        // let's connect it to actually closing a valve here yeah?
+        var unitSelected = whichUnit(msg.selectedUnitNum);
+        unitSelected.valveState = false;
+        closeValve(unitSelected);
+        //io.emit('close valve', msg);
     });
     
     socket.on('select unit', function(msg) {
         console.log("Unit Selected Is: " + msg.value); 
         selectedUnit = whichUnit(msg.value);
+    });
+    
+    // send info about selected unit back to the second page
+    socket.on('check unit', function(msg) {
+        io.emit('check unit', {unitNum: selectedUnit.unitNum, valveState: selectedUnit.valveState});
     });
     
     socket.on('page number', function(msg) {

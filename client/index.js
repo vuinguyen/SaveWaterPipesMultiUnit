@@ -52,25 +52,6 @@ socket.on('user connect', function(msg) {
     }
 });
 
-/*
-// This doesn't seem to work
-socket.on('temp value', function(msg) {
-    var now = new Date();
-    var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-    //$('#temperature-table').prepend($('Testing'));
-    console.log("From page 1: unitNum is: " + msg.unitNum + ", temp is: " + msg.temp);
-    
-    
-    /*
-    <tr class="warning">
-        <td class="row-temperature"> 38 F </td>
-        <td class="row-time"> 8:15PM </td>
-      </tr>
-      */
-});
-*/
-
-
 socket.on('user disconnect', function(msg) {
     console.log("user disconnect: " + msg);
     var element = '#'+msg;
