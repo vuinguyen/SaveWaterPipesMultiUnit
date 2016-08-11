@@ -77,7 +77,9 @@ function unit(unitNum, unitLetter, slider, valve, valveState, severity) {
     this.averageTemp = 0;
     this.averageSeverity = 0;
     
-    this.averageCounter = 0;   
+    this.averageCounter = 0;
+    this.manualOpen = false;
+    this.manualClose = false;
 };
 
 var unit1 = new unit(1, "A", groveSlide1, valve1, valveState1, 1);
@@ -251,7 +253,8 @@ function temperatureLoop()
                     }
                   
                     // if valve is open close it
-                    if ((unitArray[i].averageSeverity <= 2) && (unitArray[i].valveState == true))
+                    if ( (unitArray[i].manualClose == true) ||
+                        ((unitArray[i].averageSeverity <= 2) && (unitArray[i].valveState == true)) )
                     {
                         // close the valve
                         // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
@@ -260,7 +263,8 @@ function temperatureLoop()
                     }    
                     // if valve is closed, open it
                   
-                    if ((unitArray[i].averageSeverity == 3) && (unitArray[i].valveState == false))
+                    if ( (unitArray[i].manualOpen == true) ||
+                        ((unitArray[i].averageSeverity == 3) && (unitArray[i].valveState == false)) )
                     {
                         // open the valve
                         // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
@@ -385,6 +389,8 @@ io.on('connection', function(socket) {
         // let's connect it to actually opening a valve here yeah?
         var unitSelected = whichUnit(msg.selectedUnitNum);
         unitSelected.valveState = true;
+        unitSelected.manualOpen = true;
+        unitSelected.manualClose = false;
         openValve(unitSelected);
         //io.emit('open valve', msg);
     });
@@ -393,9 +399,17 @@ io.on('connection', function(socket) {
         // let's connect it to actually closing a valve here yeah?
         var unitSelected = whichUnit(msg.selectedUnitNum);
         unitSelected.valveState = false;
+        unitSelected.manualOpen = false;
+        unitSelected.manualClose = true;
         closeValve(unitSelected);
         //io.emit('close valve', msg);
     });
+    
+    socket.on('auto valve', function(msg) {
+        var unitSelected = whichUnit(msg.selectedUnitNum);
+        unitSelected.manualClose = false;
+        unitSelected.manualOpen = false;
+    })
     
     socket.on('select unit', function(msg) {
         console.log("Unit Selected Is: " + msg.value); 

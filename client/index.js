@@ -1,5 +1,8 @@
 var socket = io();
 var userId = "user";
+var valveState1 = false;    // not dripping
+var valveState2 = false;    // not dripping
+var valveState3 = false;    // not dripping
 
 $("#button-unit1").on('click', function(e){
     socket.emit('select unit', {value: 1});
@@ -50,6 +53,8 @@ socket.on('user connect', function(msg) {
         console.log("Client side userId: "+msg);
         userId = msg;
     }
+    // when we first connect, we should check to see if need to change
+    // status of dripping / not dripping for all units
 });
 
 socket.on('user disconnect', function(msg) {

@@ -66,7 +66,11 @@ $("#button-on").on('click', function(e){
 });
 
 $("#button-off").on('click', function(e){
-    socket.emit('close valve', {selectedUnitNumNum: selectedUnitNumNum});
+    socket.emit('close valve', {selectedUnitNum: selectedUnitNum});
+});
+
+$("#button-auto").on('click', function(e){
+    socket.emit('auto valve', {selectedUnitNum: selectedUnitNum});
 });
 
 function openValve()
