@@ -59,7 +59,7 @@
         <td class="row-temperature"> 38 F </td>
         <td class="row-time"> 8:15PM </td>
       </tr>
-       <tr class="error" rowspan="2">
+      <tr class="error" rowspan="2">
         <td class="row-error"> WARNING: CENSOR OFFLINE</td>
       </tr>
       <tr class="error" rowspan="2">
@@ -80,7 +80,7 @@
       <tr class="danger">
         <td class="row-temperature"> 38 F </td>
         <td class="row-time"> 8:15PM </td>
-      </tr> -->           
+      </tr> -->
     </table>
 </div>
 
@@ -98,9 +98,7 @@
 
 		</div>
 		<br />
-    <!--
 		<h4><a href="">Past History</a></h4>
--->
 	</section>
 
 	<!-- faucet detail section -->
@@ -119,8 +117,11 @@
 	<br />
   <button id="button-auto" class="auto" type="button">Auto</button>
   <button id="button-on" class="on" type="button">Open</button>
+<<<<<<< HEAD
+  <button id="button-off" class="off" type="button">Closed</button>
+=======
   <button id="button-off" class="off" type="button">Close</button>
-
+>>>>>>> eb161ab7255b3065cbe442f0ed5909f3812db79b
 
 	</section>
 
