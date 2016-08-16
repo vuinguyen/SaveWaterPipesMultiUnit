@@ -30,8 +30,8 @@
         "name": "SaveWaterMultiUnits.xdk"
       },
       "SaveWaterMultiUnits.xdke": {
-        "previousModTime": 1471317400000,
-        "modified": 1471317400000,
+        "previousModTime": 1471322780000,
+        "modified": 1471322780000,
         "seen": true,
         "name": "SaveWaterMultiUnits.xdke"
       },
@@ -72,8 +72,8 @@
         "name": "client/index.css"
       },
       "client/index.html": {
-        "previousModTime": 1471312020000,
-        "modified": 1471312020000,
+        "previousModTime": 1471322547000,
+        "modified": 1471322547000,
         "seen": true,
         "name": "client/index.html"
       },
@@ -138,8 +138,8 @@
         "name": "client/override.js"
       },
       "client/overview-styles.css": {
-        "previousModTime": 1471037331000,
-        "modified": 1471037331000,
+        "previousModTime": 1471318534000,
+        "modified": 1471318534000,
         "seen": true,
         "name": "client/overview-styles.css"
       },
@@ -204,14 +204,14 @@
         "name": "client/faucet-styles.css"
       },
       "client/selectedFaucetReading.html": {
-        "previousModTime": 1471314762000,
-        "modified": 1471314762000,
+        "previousModTime": 1471323138000,
+        "modified": 1471323138000,
         "seen": true,
         "name": "client/selectedFaucetReading.html"
       },
       "client/temperature-styles.css": {
-        "previousModTime": 1471037331000,
-        "modified": 1471037331000,
+        "previousModTime": 1471322666000,
+        "modified": 1471322666000,
         "seen": true,
         "name": "client/temperature-styles.css"
       },
@@ -244,119 +244,17 @@
         "modified": 1471037331000,
         "seen": true,
         "name": "lcd.js"
+      },
+      "client/selectedFaucetReading.html.orig": {
+        "previousModTime": 1471318952000,
+        "modified": 1471318952000,
+        "seen": true,
+        "name": "client/selectedFaucetReading.html.orig"
       }
     },
     "boardFileStatus": {
-      "LICENSE.md": {
-        "previousModTime": 1471318052100
-      },
-      "README.md": {
-        "previousModTime": 1471318052100
-      },
-      "icon.png": {
-        "previousModTime": 1471318052100
-      },
-      "main.js": {
-        "previousModTime": 1471318052100
-      },
-      "package.json": {
-        "previousModTime": 1471318052100
-      },
-      "websockets_client.png": {
-        "previousModTime": 1471318052100
-      },
-      "xdk-publish-meta-data.json": {
-        "previousModTime": 1471318052100
-      },
-      "client/index.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/index.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/index.js": {
-        "previousModTime": 1471318052100
-      },
-      "xdk/project-info.json": {
-        "previousModTime": 1471318052100
-      },
-      "client/secondpage.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/secondpage.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/secondpage.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16/index.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16/index.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16/index.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/main-styles.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/override.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/overview-styles.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16a/index.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16a/index.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16a/index.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/index.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/index.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/index.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/secondpage.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/secondpage.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/files_old/8-6-16b/secondpage.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/faucet-styles.css": {
-        "previousModTime": 1471318052100
-      },
       "client/selectedFaucetReading.html": {
-        "previousModTime": 1471318052100
-      },
-      "client/temperature-styles.css": {
-        "previousModTime": 1471318052100
-      },
-      "client/faucetOff.jpg": {
-        "previousModTime": 1471318052100
-      },
-      "client/faucetOn.jpg": {
-        "previousModTime": 1471318052100
-      },
-      "client/selectedFaucetReading.js": {
-        "previousModTime": 1471318052100
-      },
-      "client/lcd.js": {
-        "previousModTime": 1471318052100
-      },
-      "lcd.js": {
-        "previousModTime": 1471318052100
+        "previousModTime": 1471323145107
       }
     }
   }
