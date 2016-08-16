@@ -153,6 +153,7 @@ function toggleValve(inputUnit)
     if (inputUnit.valveState == true) { inputUnit.valve.on(); }
     else { inputUnit.valve.off(); }
 }
+// this method might be OBE
 
 // we must update the website whenever the valve opens or closes
 // for the first and the second page
@@ -255,23 +256,37 @@ function temperatureLoop()
                                         unitArray[i].averageSeverity, 1);
                     }
                   
-                    // if valve is open close it
-                    if ( (unitArray[i].manualClose == true) ||
-                        ((unitArray[i].averageSeverity <= 2) && (unitArray[i].valveState == true)) )
+                    // if manual close is true, the close valve
+                    if (unitArray[i].manualClose == true) 
+                        {
+                            unitArray[i].valveState = (unitArray[i].valveState == true) ? false : false;
+                            closeValve(unitArray[i]);
+                        }
+                    
+                    else if (unitArray[i].manualOpen == true)
+                        {
+                            unitArray[i].valveState = (unitArray[i].valveState == false) ? true : true;
+                            openValve(unitArray[i]);
+                        }
+                    
+                    //else if ( (unitArray[i].manualClose == true) ||
+                    else if    ((unitArray[i].averageSeverity <= 2) && (unitArray[i].valveState == true)) 
                     {
                         // close the valve
                         // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
-                        unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
+                        //unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
+                        unitArray[i].valveState = (unitArray[i].valveState == true) ? false : false;
                         closeValve(unitArray[i]);
                     }    
                     // if valve is closed, open it
                   
-                    if ( (unitArray[i].manualOpen == true) ||
-                        ((unitArray[i].averageSeverity == 3) && (unitArray[i].valveState == false)) )
+                    //else if ( (unitArray[i].manualOpen == true) ||
+                    else if ((unitArray[i].averageSeverity == 3) && (unitArray[i].valveState == false)) 
                     {
                         // open the valve
                         // NOTE: CANNOT do this inversion in the closeValve/openValve functions.
-                        unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
+                        //unitArray[i].valveState = !unitArray[i].valveState; // invert the valveState
+                        unitArray[i].valveState = (unitArray[i].valveState == false) ? true : true;
                         openValve(unitArray[i]);
                     } 
                   
@@ -361,13 +376,7 @@ io.on('connection', function(socket) {
     //temperatureLoop();
     mainLoop();
     
-    /*
-    socket.on('user disconnect', function(msg) {
-        console.log('remove: ' + msg);
-        connectedUsersArray.splice(connectedUsersArray.lastIndexOf(msg), 1);
-        io.emit('user disconnect', msg);
-    });
-    */
+    
     
     // Note: In order for the original webserver application worked, the client 
     // really needed to send a 'user disconnect' message first before it can send
@@ -395,6 +404,8 @@ io.on('connection', function(socket) {
         unitSelected.manualOpen = true;
         unitSelected.manualClose = false;
         openValve(unitSelected);
+    
+        console.log("Clicked Open");
         //io.emit('open valve', msg);
     });
     
@@ -405,6 +416,8 @@ io.on('connection', function(socket) {
         unitSelected.manualOpen = false;
         unitSelected.manualClose = true;
         closeValve(unitSelected);
+        
+        console.log("Clicked Close");
         //io.emit('close valve', msg);
     });
     
