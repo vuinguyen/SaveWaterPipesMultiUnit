@@ -5,9 +5,31 @@
 }
 
 /*Grid*/
+#scrollable-table{
+	width: 80%;
+	height: 150px;
+	overflow:auto;
+}
+
 #temperature-table{
 	padding-bottom: 15%;
 	float: left;
+}
+
+#header-names{
+	margin-bottom: 5%;
+	display: flex;
+	width: 50%;
+}
+
+.heading-temperatue{
+	flex: 1;
+	float: left;
+}
+
+.heading-time{
+	float: right;
+	padding-left: 30%;
 }
 
 [class*="heading-"]{
@@ -23,20 +45,6 @@
 		font-weight: bold;
 }
 
-
-/*Original listing */
-ul {
-	padding:5px;
-	list-style-type: none;
-	background-color: #fafcfe;
-	width: 45%
-}
-
-ul li {
-	margin:5px;
-	text-decoration: bold;
-}
-
 /*Temperature readings - color*/
 .good {
 	color: green;
@@ -50,7 +58,6 @@ ul li {
 	color: orange;
 }
 
-
 /*other stuff*/
 .display-previous{
 	text-decoration: underline;
@@ -59,9 +66,9 @@ ul li {
 
 
 div#legend-key{
-    width: 20%;
+  width: 20%;
 	padding: 5px;
-    border: 2px solid #bcc4ca;
+  border: 2px solid #bcc4ca;
 	background-color: #FBFDFE;
 	border-radius: 12px;
 }
