@@ -4,6 +4,49 @@ var valveState1 = false;    // not dripping
 var valveState2 = false;    // not dripping
 var valveState3 = false;    // not dripping
 
+function updateStatus(state, valveNum) {
+    if (valveNum == 1)
+        {
+            valveState1 = !valveState1;
+            if(state == false)
+            {
+                $('#unitA').text("Water Pipe: NOT DRIPPING");
+            }
+            else
+            {
+                $('#unitA').text("Water Pipe: DRIPPING");    
+            }
+        }
+    else if (valveNum == 2)
+        {
+            valveState2 = !valveState2;
+            if(state == false)
+            {
+                $('#unitB').text("Water Pipe: NOT DRIPPING");
+            }
+            else
+            {
+                $('#unitB').text("Water Pipe: DRIPPING");    
+            }
+        }
+    else if (valveNum == 3)
+        {
+            valveState3 = !valveState3;
+            if(state == false)
+            {
+                $('#unitC').text("Water Pipe: NOT DRIPPING");
+            }
+            else
+            {
+                $('#unitC').text("Water Pipe: DRIPPING");    
+            }
+        }
+};
+
+socket.on('toggle valve', function(msg) {
+    updateStatus(msg.valveState, msg.unitNum);
+});
+
 $("#button-unit1").on('click', function(e){
     socket.emit('select unit', {value: 1});
 });
@@ -48,6 +91,8 @@ socket.on('connected users', function(msg) {
     }
 });
 
+
+
 socket.on('user connect', function(msg) {
     if(userId === "user"){
         console.log("Client side userId: "+msg);
@@ -55,6 +100,22 @@ socket.on('user connect', function(msg) {
     }
     // when we first connect, we should check to see if need to change
     // status of dripping / not dripping for all units
+    //$("#unitA").text("NOT DRIPPING"); 
+    //$("#unitB").text("NOT DRIPPING"); 
+    //$("#unitC").text("NOT DRIPPING"); 
+    socket.emit("check statuses", userId);
+});
+
+
+socket.on('check statuses', function(msg) {
+      valveState1 = msg.valveState1;
+      updateStatus(valveState1, 1);
+
+      valveState2 = msg.valveState2;
+      updateStatus(valveState2, 2);
+
+      valveState3 = msg.valveState3;
+      updateStatus(valveState3, 3);
 });
 
 socket.on('user disconnect', function(msg) {

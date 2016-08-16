@@ -191,7 +191,10 @@ function printSensorInfo(inputUnit, inTemp, inSeverity, average)
     console.log(consoleDisplay);
     
     // print to website
-    io.emit('temp value', {unitNum: inputUnit.unitNum, temp: inTemp, severity: inSeverity});
+    if (average)
+    {
+        io.emit('temp value', {unitNum: inputUnit.unitNum, temp: inTemp, severity: inSeverity})
+    };
     // print to LCD Display (nice to have)
 }
 
@@ -218,7 +221,7 @@ function temperatureLoop()
                 //printSliderValues(unitArray[i]);
                 
                 // Question: should this temp and severity go into the unit calculation?
-                printSensorInfo(unitArray[i], temp, severity);
+                printSensorInfo(unitArray[i], temp, severity, 0);
             }
             firstTemp = false;
         }
@@ -419,6 +422,10 @@ io.on('connection', function(socket) {
     // send info about selected unit back to the second page
     socket.on('check unit', function(msg) {
         io.emit('check unit', {unitNum: selectedUnit.unitNum, valveState: selectedUnit.valveState});
+    });
+    
+    socket.on('check statuses', function(msg) {
+        io.emit('check statuses', {valveState1: unit1.valveState, valveState2: unit2.valveState, valveState3: unit3.valveState});
     });
     
     socket.on('page number', function(msg) {
