@@ -29,40 +29,17 @@
 		<h2>Temperature/DateTime</h2>
 		<h4 id="currentDate">	</h4>
 
-    <!-- Grid to display temp readings -->
+<!-- Grid to display temp readings -->
+<div id="header-names">
+   <div class="heading-temperature">Temperature</div>&nbsp;&nbsp;
+   <div class="heading-time">Time</div>
+ </div>
 
-   <!--Old ul listing-->
-   <!-- <ul>
-   <li class="danger">Temp. 35 at 8:12pm</li>
-   <li class="danger">Temp. 38 at 8:12pm</li>
-   <li class="warning">Temp. 41 at 8:12pm</li>
-   <li class="warning">Temp. 42 at 8:12pm</li>
-   <li class="good">Temp. 48 at 8:12pm</li>
-   <li class="good">Temp. 52 at 8:12pm</li>
-   <li class="good">Temp. 55 at 8:12pm</li>
-   <li class="error">***WARNING: CENSOR OFFLINE***</li>
-   <li class="error">***WARNING: CENSOR OFFLINE***</li>
-   <li class="error">***WARNING: CENSOR OFFLINE***</li>
-   <li class="warning">Temp. 41 at 8:12pm</li>
-   <li class="warning">Temp. 42 at 8:12pm</li>
-   <li class="warning">Temp. 41 at 8:12pm</li>
-   <li class="warning">Temp. 42 at 8:12pm</li>
-   <li class="good">Temp. 48 at 8:12pm</li>
-   <li class="good">Temp. 52 at 8:12pm</li>
-   <li class="good">Temp. 55 at 8:12pm</li>
-   </ul> -->
+<div id="scrollable-table">
+   <table id="temperature-table">
 
-    <table id="temperature-table">
-        <tr>
-            <th class="heading-temperature">
-                Temperature
-            </th>
-            <th class="heading-time">
-                Time
-            </th>
-        </tr>
-        <!--
-      <tr class="danger">
+     <!--Test Data -->
+      <!-- <tr class="danger">
         <td class="row-temperature"> 35 F </td>
         <td class="row-time"> 8:12PM </td>
       </tr>
@@ -83,10 +60,10 @@
         <td class="row-time"> 8:15PM </td>
       </tr>
       <tr class="error" rowspan="2">
-        <td class="row-error" > ***WARNING: CENSOR OFFLINE*** </td>
+        <td class="row-error"> WARNING: CENSOR OFFLINE</td>
       </tr>
       <tr class="error" rowspan="2">
-        <td class="row-error"> ***WARNING: CENSOR OFFLINE*** </td>
+        <td class="row-error"> WARNING: CENSOR OFFLINE</td>
       </tr>
       <tr class="good">
         <td class="row-temperature"> 38 F </td>
@@ -103,30 +80,9 @@
       <tr class="danger">
         <td class="row-temperature"> 38 F </td>
         <td class="row-time"> 8:15PM </td>
-      </tr>
--->
+      </tr> -->
     </table>
-
-      <!-- <ul>
-      <li class="danger">Temp. 35 at 8:12pm</li>
-      <li class="danger">Temp. 38 at 8:12pm</li>
-      <li class="warning">Temp. 41 at 8:12pm</li>
-      <li class="warning">Temp. 42 at 8:12pm</li>
-      <li class="good">Temp. 48 at 8:12pm</li>
-      <li class="good">Temp. 52 at 8:12pm</li>
-      <li class="good">Temp. 55 at 8:12pm</li>
-      <li class="error">***WARNING: CENSOR OFFLINE***</li>
-      <li class="error">***WARNING: CENSOR OFFLINE***</li>
-      <li class="error">***WARNING: CENSOR OFFLINE***</li>
-      <li class="warning">Temp. 41 at 8:12pm</li>
-      <li class="warning">Temp. 42 at 8:12pm</li>
-      <li class="warning">Temp. 41 at 8:12pm</li>
-      <li class="warning">Temp. 42 at 8:12pm</li>
-      <li class="good">Temp. 48 at 8:12pm</li>
-      <li class="good">Temp. 52 at 8:12pm</li>
-      <li class="good">Temp. 55 at 8:12pm</li>
-      </ul> -->
-
+</div>
 
 
     <!--date history, possible database -->
@@ -160,8 +116,8 @@
 
 	<br />
   <button id="button-auto" class="auto" type="button">Auto</button>
-  <button id="button-on" class="on" type="button">On</button>
-  <button id="button-off" class="off" type="button">Off</button>
+  <button id="button-on" class="on" type="button">Open</button>
+  <button id="button-off" class="off" type="button">Close</button>
 
 	</section>
 

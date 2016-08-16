@@ -18,6 +18,9 @@
 
 }
 
+[class*="disable"]{
+  color: lightgrey;
+}
 
 ul {
 	padding:5px;
