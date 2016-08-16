@@ -29,7 +29,7 @@
 
 .heading-time{
 	float: right;
-	padding-left: 30%;
+	padding-left: 20%;
 }
 
 [class*="heading-"]{
@@ -39,6 +39,10 @@
 
 .row-temperature{
 	text-align: center;
+}
+
+.row-time{
+		padding-left: 120%;
 }
 
 .row-error{
