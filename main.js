@@ -108,7 +108,8 @@ var timeOutSeconds = 3000;  // 1000 is 1 second
 
 var thresholdValue = 0.5;   // threshold of whether values changed enough for calculations
 var ratio = 1/5;            // used to convert slider values to temp
-var constant = -36;         // used to convert slider values to temp
+//var constant = -36;         // used to convert slider values to temp
+var constant = -20;
 var firstTemp = true;       // is this the first temperature reading?
 
 var criticalTemp = 33;
@@ -434,7 +435,8 @@ io.on('connection', function(socket) {
     
     // send info about selected unit back to the second page
     socket.on('check unit', function(msg) {
-        io.emit('check unit', {unitNum: selectedUnit.unitNum, valveState: selectedUnit.valveState});
+        io.emit('check unit', {unitNum: selectedUnit.unitNum, valveState: selectedUnit.valveState,
+                              unitLetter: selectedUnit.unitLetter});
     });
     
     socket.on('check statuses', function(msg) {

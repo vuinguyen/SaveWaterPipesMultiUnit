@@ -30,8 +30,8 @@
         "name": "SaveWaterMultiUnits.xdk"
       },
       "SaveWaterMultiUnits.xdke": {
-        "previousModTime": 1471322780000,
-        "modified": 1471322780000,
+        "previousModTime": 1471394356000,
+        "modified": 1471394356000,
         "seen": true,
         "name": "SaveWaterMultiUnits.xdke"
       },
@@ -42,8 +42,8 @@
         "name": "icon.png"
       },
       "main.js": {
-        "previousModTime": 1471318015000,
-        "modified": 1471318015000,
+        "previousModTime": 1471342187000,
+        "modified": 1471342187000,
         "seen": true,
         "name": "main.js"
       },
@@ -204,8 +204,8 @@
         "name": "client/faucet-styles.css"
       },
       "client/selectedFaucetReading.html": {
-        "previousModTime": 1471323138000,
-        "modified": 1471323138000,
+        "previousModTime": 1471345798000,
+        "modified": 1471345798000,
         "seen": true,
         "name": "client/selectedFaucetReading.html"
       },
@@ -228,8 +228,8 @@
         "name": "client/faucetOn.jpg"
       },
       "client/selectedFaucetReading.js": {
-        "previousModTime": 1471315154000,
-        "modified": 1471315154000,
+        "previousModTime": 1471345512000,
+        "modified": 1471345512000,
         "seen": true,
         "name": "client/selectedFaucetReading.js"
       },
@@ -252,10 +252,6 @@
         "name": "client/selectedFaucetReading.html.orig"
       }
     },
-    "boardFileStatus": {
-      "client/selectedFaucetReading.html": {
-        "previousModTime": 1471323145107
-      }
-    }
+    "boardFileStatus": {}
   }
 }

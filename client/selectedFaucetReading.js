@@ -98,6 +98,8 @@ socket.on('user connect', function(msg) {
 
 // from here, we get the unit selected and the state of the unit's valve
 socket.on('check unit', function(msg) {
+     $("#header-title").text("Your Water Pipe Status: " + msg.unitLetter);
+                           
     selectedUnitNum = msg.unitNum;
     valveState = msg.valveState;
     
